@@ -31,7 +31,7 @@ const Users = mongoose.model("Users", userSchema);
 
 // Serve Form Page
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "form.html"));
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
 // Handle Form Submission
