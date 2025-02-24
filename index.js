@@ -2,11 +2,13 @@ require("dotenv").config(); // Load environment variables
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const cors = require("cors"); // Import CORS to handle cross-origin requests
 
 const app = express();
 const port = process.env.PORT || 3015;
 
 // Middleware
+app.use(cors({ origin: "https://rohit29032005.github.io" })); // Allow requests only from this domain
 app.use(express.static(__dirname));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Ensure Express can parse JSON
@@ -29,7 +31,7 @@ const Users = mongoose.model("Users", userSchema);
 
 // Serve Form Page
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+    res.sendFile(path.join(__dirname, "form.html"));
 });
 
 // Handle Form Submission
@@ -37,13 +39,13 @@ app.post("/post", async (req, res) => {
     try {
         console.log("📥 Received Form Data:", req.body);
 
-        const { regd_no, name, email, branch ,password} = req.body;
+        const { regd_no, name, email, branch, password } = req.body;
 
-        if ( !name || !email) {
+        if (!name || !email) {
             return res.status(400).send("❌ All fields are required!");
         }
 
-        const user = new Users({  name, email, password });
+        const user = new Users({ name, email, password });
         await user.save();
 
         console.log("✅ Data Saved in MongoDB Atlas:", user);
@@ -58,13 +60,6 @@ app.post("/post", async (req, res) => {
 app.get("/signup", (req, res) => {
     res.sendFile(path.join(__dirname, "signup.html"));
 });
-
-const response = await fetch("https://rohit29032005.github.io", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-});
-
 
 // Start Server
 app.listen(port, () => {
