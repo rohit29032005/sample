@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission</title>
+    <link rel="stylesheet" href="form.css">
+</head>
+<body>
+    <div class="container">
+        <form id="userForm">
+            <label for="name">Name :</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="password">password :</label>
+            <input type="password" id="password" name="password" required>
+
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("userForm").addEventListener("submit", async function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch("/post", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    console.log(response)
+                    window.location.href ="signup.html"; // Redirect to success page
+                } else {
+                    console.log(response)
+                    alert("Form submission failed!");
+                }
+            } catch (error) {
+                console.error("Error submitting form:", error);
+            }
+        });
+    </script>
+</body>
+</html>
