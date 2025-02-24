@@ -59,6 +59,13 @@ app.get("/signup", (req, res) => {
     res.sendFile(path.join(__dirname, "signup.html"));
 });
 
+const response = await fetch("https://rohit29032005.github.io", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+});
+
+
 // Start Server
 app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port}/`);
